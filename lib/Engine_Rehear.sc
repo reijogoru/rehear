@@ -3,7 +3,7 @@ Engine_Rehaar : CroneEngine {
 
     var synthSampler;
     var oscs;
-    
+    var osfun;
 
     // don't change this
     *new { arg context, doneCallback;
@@ -49,6 +49,13 @@ alloc {
  synthSampler =  Synth("Rehaar",target:context.server);
 
 
+  OSCdef(\playhead, { |msg|
+ ("Playhead: %       BufDur: %".format(
+    SuperPair(*msg[3..4]).asFloat,
+ ~buf.duration.asTimeString)
+ ).postln;
+ NetAddr("127.0.0.1", 10111).sendMsg("position",SuperPair(*msg[3..4]).asFloat);
+}, '/playhead');
 
 
 

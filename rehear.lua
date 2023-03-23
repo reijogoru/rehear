@@ -15,6 +15,9 @@ m = midi.connect()
 
 rate = 1
 enc_pos = 1
+position = 0
+position_time =""
+selecting = false
 
 UI=require 'ui'
 
@@ -93,6 +96,26 @@ function enc(n,d)
 end
 
 
+function osc_in(path, args, from)
+  position = args[1]
+ update_positions()
+end
+
+osc.event = osc_in
+
+
+
+
+function update_positions()
+   local total_seconds = math.floor(position - 1)
+  local minutes = math.floor(total_seconds / 60)
+  local seconds = total_seconds % 60
+   position_time = string.format("%d:%02d", minutes, seconds)
+  if selecting == false then 
+  redraw() end
+end
+
+
 
 function redraw()
   screen.clear()
@@ -104,6 +127,10 @@ function redraw()
     screen.update()
     return
   end
+  
+  screen.move(118,10)
+   screen.text_right("Pos: " .. position_time)
+ 
   screen.move(118,62)
   if enc_pos == 1 then
   screen.text_right("-> ")
