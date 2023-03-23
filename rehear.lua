@@ -1,7 +1,18 @@
--- REHEAR
+-- REHEAR.  ((d[-_-]b))
 -- 
+-- K1 load audio file
 --
--- press K1 to open a file
+-- K2 fastforward or rewind
+--
+-- enc3 select ff, pause or rw
+-- 
+-- K3 mark a position
+--
+-- marked positions will be saved 
+-- in "/home/we/dust/code/
+-- rehear/markers.txt"
+--
+
 
 
 
@@ -28,10 +39,7 @@ Needs_Restart=false
 Engine_Exists=(util.file_exists('/home/we/.local/share/SuperCollider/Extensions/SuperBinaryOpUGen.so') or util.file_exists('/home/we/.local/share/SuperCollider/Extensions/SuperBufRd.so') or util.file_exists('/home/we/.local/share/SuperCollider/Extensions/SuperPoll.so'))
 
 -- Initialize global variable to store the file path
-file_path_t = "/home/we/dust/code/rehear/review.txt"
-
-
-
+file_path_t = "/home/we/dust/code/rehear/markers.txt"
 
 
 function init()
@@ -159,7 +167,7 @@ function key(n,z)
     
   elseif n==2 and z==1 then
     
-    rate(13)
+    rate(15)
     elseif n == 2 and z == 0 then
     rate(1)
   elseif n==3 and z==1 then
@@ -201,12 +209,15 @@ function redraw()
     screen.update()
     return
   end
+  screen.font_size(8)
   screen.move(10,10)
   screen.text("Length: " .. duration_time)
   
   screen.move(118,10)
    screen.text_right("Pos: " .. position_time)
- 
+   screen.move(10,20)
+  
+
   screen.move(118,62)
   if enc_pos == 1 then
   screen.text_right("-> ")
@@ -216,9 +227,11 @@ function redraw()
      screen.text_right("<-")
   end
    
-   screen.move(10,40)
+   screen.move(10,30)
   screen.text("Last Marker:  " .. formatted_time)
-   
-  
+   screen.move(12,56)
+  screen.font_size(16)
+  screen.text("d(-_-)b")
+
   screen.update()
 end
