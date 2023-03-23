@@ -33,9 +33,9 @@ function init()
         Restart_Message=UI.Message.new{"installing Extensions ..."}
         redraw()
         clock.sleep(1)
-        os.execute("cp /home/we/dust/code/rehaar/lib/SuperBinaryOpUGen.so /home/we/.local/share/SuperCollider/Extensions/")
-        os.execute("cp /home/we/dust/code/rehaar/lib/SuperBufRd.so /home/we/.local/share/SuperCollider/Extensions/")
-        os.execute("cp /home/we/dust/code/rehaar/lib/SuperPoll.so /home/we/.local/share/SuperCollider/Extensions/")
+        os.execute("cp /home/we/dust/code/rehear/lib/SuperBinaryOpUGen.so /home/we/.local/share/SuperCollider/Extensions/")
+        os.execute("cp /home/we/dust/code/rehear/lib/SuperBufRd.so /home/we/.local/share/SuperCollider/Extensions/")
+        os.execute("cp /home/we/dust/code/rehear/lib/SuperPoll.so /home/we/.local/share/SuperCollider/Extensions/")
       end
      Restart_Message=UI.Message.new{"please restart norns."}
     redraw()
@@ -45,7 +45,7 @@ function init()
     do return end
   end
   
-  engine.buf("/home/we/dust/audio/tape/0000.wav")
+  engine.buf(0)
 end
 
 
