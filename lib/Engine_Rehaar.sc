@@ -35,12 +35,13 @@ alloc {
 		}).add;
 		
 		
-	OSCdef(\playhead, { |msg|
+   OSCdef(\playhead, { |msg|
  ("Playhead: %       BufDur: %".format(
     SuperPair(*msg[3..4]).asFloat.asTimeString,
  ~buf.duration.asTimeString)
  ).postln;
 }, '/playhead');
+
 
 
 context.server.sync;
@@ -50,7 +51,7 @@ synthSampler =  Synth("Rehaar",target:context.server);
        
 	
 this.addCommand("buf","s", { arg msg;
-                Buffer.freeAll;
+                Buffer.free;
                 Buffer.read(context.server,msg[1],action:{
                 arg buffer;
                 ~buf = buffer;
