@@ -65,7 +65,7 @@ function key(n,z)
     fileselect.enter(_path.dust,load_file)
   elseif n==2 and z==1 then
     
-    rate(20)
+    rate(13)
     elseif n == 2 and z == 0 then
     rate(1)
   elseif n==3 and z==1 then
