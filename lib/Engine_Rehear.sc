@@ -36,13 +36,6 @@ alloc {
 	context.server.sync;	
 
 
-  OSCdef(\playhead, { |msg|
- ("Playhead: %       BufDur: %".format(
-    SuperPair(*msg[3..4]).asFloat.asTimeString,
- ~buf.duration.asTimeString)
- ).postln;
-}, '/playhead');
-
 
 
 		
@@ -52,9 +45,9 @@ alloc {
   OSCdef(\playhead, { |msg|
  ("Playhead: %       BufDur: %".format(
     SuperPair(*msg[3..4]).asFloat,
- ~buf.duration.asTimeString)
+ ~buf.duration.asFloat)
  ).postln;
- NetAddr("127.0.0.1", 10111).sendMsg("position",SuperPair(*msg[3..4]).asFloat);
+ NetAddr("127.0.0.1", 10111).sendMsg("position",SuperPair(*msg[3..4]).asFloat, "duration",~buf.duration.asFloat);
 }, '/playhead');
 
 
@@ -75,6 +68,12 @@ this.addCommand("buf","s", { arg msg;
 this.addCommand("rate","f", { arg msg;
             synthSampler.set(
                 \rate,msg[1],
+            );
+        });
+        
+this.addCommand("slew","f", { arg msg;
+            synthSampler.set(
+                \slew,msg[1],
             );
         });
         
