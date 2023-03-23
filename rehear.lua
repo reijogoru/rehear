@@ -79,7 +79,7 @@ function()
  
   engine.buf("")
   
-  params:add_number("rateslew","rateslew",0,5,2)
+  params:add_number("rateslew","rateslew",0,5,1)
 params:set_action("rateslew", function(x) engine.slew(x) end)
   
   
@@ -168,6 +168,8 @@ function key(n,z)
   elseif n==2 and z==1 then
     
     rate(15)
+    
+  
     elseif n == 2 and z == 0 then
     rate(1)
   elseif n==3 and z==1 then
@@ -209,6 +211,7 @@ function redraw()
     screen.update()
     return
   end
+  screen.aa (1)
   screen.font_size(8)
   screen.move(10,10)
   screen.text("Length: " .. duration_time)
@@ -216,19 +219,20 @@ function redraw()
   screen.move(118,10)
    screen.text_right("Pos: " .. position_time)
    screen.move(10,20)
-  
-
-  screen.move(118,62)
-  if enc_pos == 1 then
-  screen.text_right("-> ")
-  elseif enc_pos == 0 then
-     screen.text_right("-")
-  else
-     screen.text_right("<-")
-  end
-   
    screen.move(10,30)
   screen.text("Last Marker:  " .. formatted_time)
+
+  screen.move(118,60)
+  screen.font_size(8)
+  if enc_pos == 1 then
+  screen.text_right(">>")
+  elseif enc_pos == 0 then
+     screen.text_right("=")
+  else
+     screen.text_right("<<")
+  end
+   
+  
    screen.move(12,56)
   screen.font_size(16)
   screen.text("d(-_-)b")
