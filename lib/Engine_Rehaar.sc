@@ -33,9 +33,10 @@ alloc {
     LPF.ar(sig, lpf_freq);
 		Out.ar(out,sig);
 		}).add;
-		
-		
-   OSCdef(\playhead, { |msg|
+	context.server.sync;	
+
+
+  OSCdef(\playhead, { |msg|
  ("Playhead: %       BufDur: %".format(
     SuperPair(*msg[3..4]).asFloat.asTimeString,
  ~buf.duration.asTimeString)
@@ -44,14 +45,16 @@ alloc {
 
 
 
-context.server.sync;
+		
+ synthSampler =  Synth("Rehaar",target:context.server);
 
-synthSampler =  Synth("Rehaar",target:context.server);
 
-       
-	
+
+
+
+
 this.addCommand("buf","s", { arg msg;
-                Buffer.free;
+                Buffer.freeAll;
                 Buffer.read(context.server,msg[1],action:{
                 arg buffer;
                 ~buf = buffer;
@@ -59,6 +62,8 @@ this.addCommand("buf","s", { arg msg;
                
             });
         });
+	
+
         
 this.addCommand("rate","f", { arg msg;
             synthSampler.set(
