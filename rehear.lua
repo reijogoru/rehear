@@ -1,6 +1,9 @@
---REHEAR
+-- REHEAR
+-- 
+--
+-- press K1 to open a file
 
----press
+
 
 
 
