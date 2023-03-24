@@ -1,4 +1,4 @@
-# rehaar
+# Rehear
 listen to audio material and create timecode markers 
 
 
@@ -7,6 +7,9 @@ listen to audio material and create timecode markers
 ### Requirements
 
 Norns
+Grid (optional)
+
+
 
 
 ### Documentation
@@ -20,3 +23,5 @@ K3 mark a position
 marked positions will be saved in "/home/we/dust/code/rehear/markers.txt"
 
 
+Grid Remote:
+Any key on the Grid is capable of marking a position
