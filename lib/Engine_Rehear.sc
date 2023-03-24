@@ -1,5 +1,5 @@
 // CroneEngine_Rehear
-Engine_Rehaar : CroneEngine {
+Engine_Rehear : CroneEngine {
 
     var synthSampler;
     var oscs;
