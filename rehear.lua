@@ -213,16 +213,18 @@ function redraw()
   end
   screen.aa (1)
   screen.font_size(8)
-  screen.move(10,10)
-  screen.text("Length: " .. duration_time)
+  screen.move(125,12)
+  screen.text_right(position_time .. " | " .. duration_time)
   
   screen.move(118,10)
-   screen.text_right("Pos: " .. position_time)
+   --screen.text_right("Pos: " .. position_time)
    screen.move(10,20)
-   screen.move(10,30)
-  screen.text("Last Marker:  " .. formatted_time)
+   screen.move(10,32)
+  screen.font_size(16)
+  screen.text("d(-_-)b")
 
-  screen.move(118,60)
+
+  screen.move(125,60)
   screen.font_size(8)
   if enc_pos == 1 then
   screen.text_right(">>")
@@ -233,9 +235,8 @@ function redraw()
   end
    
   
-   screen.move(12,56)
-  screen.font_size(16)
-  screen.text("d(-_-)b")
-
+   screen.move(2,59)
+   screen.text("Last Marker: " .. formatted_time)
+  
   screen.update()
 end
