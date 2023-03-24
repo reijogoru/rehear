@@ -15,7 +15,9 @@ Grid (optional)
 ### Documentation
 
 K1 load audio file (depending on the size of the file it can take a few seconds)
+
 K2 fastforward or rewind
+
 E3 select ff, pause or rw
  
 K3 mark a position
