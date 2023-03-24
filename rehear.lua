@@ -1,5 +1,9 @@
 -- REHEAR.  ((d[-_-]b)) v1.0.0
 -- 
+--
+--
+--    ▼ instructions below ▼
+--
 -- K1 load audio file
 --
 -- K2 fastforward or rewind
@@ -12,7 +16,8 @@
 -- in "/home/we/dust/code/
 -- rehear/markers.txt"
 --
--- Any key on the Grid is capable of marking a position
+-- Any key on the Grid is 
+-- capable of marking a position
 
 engine.name = 'Rehear'
 fileselect = require 'fileselect'
