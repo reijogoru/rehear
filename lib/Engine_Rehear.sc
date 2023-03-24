@@ -13,7 +13,7 @@ Engine_Rehear : CroneEngine {
    
 alloc {
     
-     SynthDef("Rehaar", {
+     SynthDef("Rehear", {
 			arg out = 0,
 			freq, sub_div, noise_level,
 			cutoff, resonance,
@@ -28,7 +28,7 @@ alloc {
     var lpf_freq = rate.abs.linlin(1, 3, 20000, 5000); // make fast forward less grating on ears
     var sig, playhead, isPlaying;
     rate=Lag.kr(rate,slew);
-    #sig, playhead, isPlaying = SuperPlayBuf.arDetails(2, bufnum, rate, trig, start: pos, loop: 0);
+    #sig, playhead, isPlaying = SuperPlayBufX.arDetails(2, bufnum, rate, trig, start: pos, loop: 0);
     SendReply.ar(Impulse.ar(10), '/playhead', playhead.components); // send both components of playhead
     LPF.ar(sig, lpf_freq);
 		Out.ar(out,sig);
@@ -39,14 +39,14 @@ alloc {
 
 
 		
- synthSampler =  Synth("Rehaar",target:context.server);
+ synthSampler =  Synth("Rehear",target:context.server);
 
 
   OSCdef(\playhead, { |msg|
  ("Playhead: %       BufDur: %".format(
     SuperPair(*msg[3..4]).asFloat,
  ~buf.duration.asFloat)
- ).postln;
+ );
  NetAddr("127.0.0.1", 10111).sendMsg("position",SuperPair(*msg[3..4]).asFloat, "duration",~buf.duration.asFloat);
 }, '/playhead');
 
@@ -59,6 +59,7 @@ this.addCommand("buf","s", { arg msg;
                 arg buffer;
                 ~buf = buffer;
                synthSampler.set(\bufnum,buffer);
+               
                
             });
         });
