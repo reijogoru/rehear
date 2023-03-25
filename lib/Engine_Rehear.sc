@@ -34,21 +34,11 @@ SynthDef("Rehear", {
 		Out.ar(out,sig);
 		}).add;
 		
-
 synthSampler =  Synth("Rehear",target:context.server);
 
 this.addCommand("buf", "s", { arg msg;
-
-
-     
-   synthSampler.free;
-     buffer.free;
-     
-     
-
-	
-
-
+   buffer.free;
+synthSampler.free;
 synthSampler =  Synth("Rehear",target:context.server);
 
 
@@ -90,7 +80,8 @@ OSCFunc({ arg msg;
     
      if (index / c.sampleRate >= c.duration) {
                 
-                 NetAddr("127.0.0.1", 10111).sendMsg("position",0,"duration",c.duration);}
+                 NetAddr("127.0.0.1", 10111).sendMsg("position",0,"duration",c.duration);
+                 synthSampler.free;}
                 
           
          
