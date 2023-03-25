@@ -7,7 +7,7 @@ Engine_Rehear : CroneEngine {
     var buffer;
     var c;
     var position;
-    
+    var rate;
  
     // don't change this
     *new { arg context, doneCallback;
@@ -16,14 +16,9 @@ Engine_Rehear : CroneEngine {
 
    
 alloc {
-this.addCommand("buf", "s", { arg msg;
 
 
-     
-    synthSampler.free;
-     buffer.free;
-     
-     SynthDef("Rehear", {
+SynthDef("Rehear", {
 			arg out = 0,
 			buffer,
 			amp, pan,
@@ -40,6 +35,17 @@ this.addCommand("buf", "s", { arg msg;
 		}).add;
 		
 
+synthSampler =  Synth("Rehear",target:context.server);
+
+this.addCommand("buf", "s", { arg msg;
+
+
+     
+   synthSampler.free;
+     buffer.free;
+     
+     
+
 	
 
 
@@ -48,15 +54,18 @@ synthSampler =  Synth("Rehear",target:context.server);
 
 
 
-
+c = SoundFile(msg[1].asString).info; 
     
     buffer =	Buffer.cueSoundFile(context.server,msg[1],0,2,bufferSize: 65536);
     synthSampler.set(\buffer,buffer);
-    c = SoundFile(msg[1].asString).info; 
+   
+   
 		});
 		
 
 context.server.sync;
+
+
         
 this.addCommand("rate","f", { arg msg;
             synthSampler.set(
@@ -75,13 +84,28 @@ this.addCommand("slew","f", { arg msg;
 OSCFunc({ arg msg;
     var sendID = msg[1];
     var index = msg[3];
-     msg.postln;
-     position = (index % c.numFrames / c.sampleRate);
-     NetAddr("127.0.0.1", 10111).sendMsg("position",position,"duration",c.duration);
-        
-},'/diskin');       
+     //msg.postln;
+      position = (index % c.numFrames / c.sampleRate);
+     
+    
+     if (index / c.sampleRate >= c.duration) {
+                
+                 NetAddr("127.0.0.1", 10111).sendMsg("position",0,"duration",c.duration);}
+                
+          
+         
+     {
+    NetAddr("127.0.0.1", 10111).sendMsg("position",position,"duration",c.duration);}
+     
+},'/diskin');  
+
+
+
+
 
 }
 free {synthSampler.free;
+ buffer.free;
+ 
 }
 }

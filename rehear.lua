@@ -49,6 +49,8 @@ function init()
         clock.sleep(1/30) -- 30 fps
          update_positions()
          update_duration()
+        
+   
         end
       end
     )
@@ -111,6 +113,7 @@ function load_file(file)
     formatted_time = ""
     position = 0
     duration = 0
+    
   end
 end
 
@@ -121,6 +124,7 @@ function update_positions()
    position_time = string.format("%d:%02d", minutes, seconds)
   if selecting == false then 
   redraw() end
+ 
 end
 
 function update_duration()
