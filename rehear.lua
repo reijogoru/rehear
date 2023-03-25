@@ -31,7 +31,7 @@ duration = 0
 duration_time = 0
 formatted_time = ""
 selecting = false
-loaded_files=0
+
 
 
 
@@ -48,16 +48,10 @@ function init()
         clock.sleep(1/30) -- 30 fps
          update_positions()
          update_duration()
-        
-   
         end
-      end
-    )
- 
- 
-  
-params:add_number("rateslew","rateslew",0,5,0)
-params:set_action("rateslew", function(x) engine.slew(x) end)
+      end)
+ params:add_number("rateslew","rateslew",0,5,0)
+ params:set_action("rateslew", function(x) engine.slew(x) end)
 
  
 end
@@ -100,14 +94,12 @@ osc.event = osc_in
 function load_file(file)
   selecting = false
   if file ~= "cancel" then
-    
     engine.buf(file)
     redraw()
     append_filename_to_file(file)
     formatted_time = ""
     position = 0
     duration = 0
-    
   end
 end
 
@@ -154,7 +146,7 @@ function rate(rate)
       engine.rate(rate*enc_pos)
     end
   redraw()
-  end
+end
 
 function enc(n,d)
   if n == 3 then
@@ -174,26 +166,23 @@ function redraw()
   screen.move(125,12)
   screen.text_right(position_time .. " | " .. duration_time)
   screen.move(118,10)
-     screen.move(10,20)
-   screen.move(10,32)
+  screen.move(10,20)
+  screen.move(10,32)
   screen.font_size(16)
   screen.text("d(-_-)b")
   screen.move(123,60)
   screen.font_size(8)
   if enc_pos == 1 and key_pos == 0 then
   screen.text_right("")
- 
   elseif enc_pos == 0 then
      screen.move(123,60)
      screen.text_right("pause")
-  
-  end
+   end
   if  key_pos == 1 and enc_pos == 1 then
      screen.move(119,60)
      screen.text_right(" >>  ")
      end
-   screen.move(2,59)
-   screen.text("Last Marker: " .. formatted_time)
-  
-  screen.update()
+ screen.move(2,59)
+ screen.text("Last Marker: " .. formatted_time)
+ screen.update()
 end
