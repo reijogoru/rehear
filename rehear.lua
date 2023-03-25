@@ -15,13 +15,12 @@
 -- marked positions will be saved 
 -- in "/home/we/dust/code/
 -- rehear/markers.txt"
---
--- Any key on the Grid is 
--- capable of marking a position
+
+
 
 engine.name = 'Rehear'
 fileselect = require 'fileselect'
-g = grid.connect()
+
 
 rate = 1
 enc_pos = 1
@@ -33,7 +32,7 @@ duration_time = 0
 formatted_time = ""
 selecting = false
 loaded_files=0
-Needs_Restart=false
+
 
 
 -- Initialize global variable to store the file path
@@ -59,12 +58,7 @@ function init()
   
 params:add_number("rateslew","rateslew",0,5,0)
 params:set_action("rateslew", function(x) engine.slew(x) end)
-  
-  brightness = 15 -- brightness = full bright!
-  show = {x = 1, y = 1} -- table tracking x,y position
-  grid_dirty = true -- initialize with a redraw
-  clock.run(grid_redraw_clock) -- start the grid redraw clock
-  
+
  
 end
 
@@ -171,31 +165,6 @@ function enc(n,d)
   end
 end
 
-------------------------------------------------------grid
-
-function grid_redraw_clock() -- our grid redraw clock
-  while true do -- while it's running...
-    clock.sleep(1/30) -- refresh at 30fps.
-    if grid_dirty then -- if a redraw is needed...
-      grid_redraw() -- redraw...
-      grid_dirty = false -- then redraw is no longer needed.
-    end
-  end
-end
-
-function grid_redraw() -- how we redraw
-  g:all(0) -- turn off all the LEDs
-  g:refresh() -- refresh the hardware to display the new LED selection
-end
-
-
-function g.key(x,y,z) -- define what happens if a grid key is pressed or released
-  if z==1 then -- if a grid key is pressed down...
-   
-    append_number_to_file(position)
-  end
-end
---------------------------------------------------------grid
 
 
 function redraw()
