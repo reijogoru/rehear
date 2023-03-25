@@ -25,6 +25,7 @@ g = grid.connect()
 
 rate = 1
 enc_pos = 1
+key_pos = 0
 position = 0
 position_time = 0
 duration = 0
@@ -34,36 +35,14 @@ selecting = false
 loaded_files=0
 Needs_Restart=false
 
-UI=require 'ui'
-
-Engine_Exists=(util.file_exists('/home/we/.local/share/SuperCollider/Extensions/SuperBinaryOpUGen.so') or util.file_exists('/home/we/.local/share/SuperCollider/Extensions/SuperBufRd.so') or util.file_exists('/home/we/.local/share/SuperCollider/Extensions/SuperPoll.so'))
 
 -- Initialize global variable to store the file path
 file_path_t = "/home/we/dust/code/rehear/markers.txt"
 
 
 function init()
-    Needs_Restart=false
-  if not Engine_Exists then
-    clock.run(function()
-      if not Engine_Exists then
-        Needs_Restart=true
-        Restart_Message=UI.Message.new{"installing Extensions ..."}
-        redraw()
-        clock.sleep(1)
-        os.execute("cp /home/we/dust/code/rehear/lib/SuperBinaryOpUGen.so /home/we/.local/share/SuperCollider/Extensions/")
-        os.execute("cp /home/we/dust/code/rehear/lib/SuperBufRd.so /home/we/.local/share/SuperCollider/Extensions/")
-        os.execute("cp /home/we/dust/code/rehear/lib/SuperPoll.so /home/we/.local/share/SuperCollider/Extensions/")
-      end
-     Restart_Message=UI.Message.new{"please restart norns."}
-    redraw()
-      clock.sleep(1)
-      do return end
-    end)
-    do return end
-  end
-  
-   engine.buf("")
+    
+   
    screen_redraw_clock = clock.run(
   function()
       while true do
@@ -76,7 +55,7 @@ function init()
  
  
   
-params:add_number("rateslew","rateslew",0,5,1)
+params:add_number("rateslew","rateslew",0,5,0)
 params:set_action("rateslew", function(x) engine.slew(x) end)
   
   brightness = 15 -- brightness = full bright!
@@ -125,6 +104,7 @@ osc.event = osc_in
 function load_file(file)
   selecting = false
   if file ~= "cancel" then
+    
     engine.buf(file)
     redraw()
     append_filename_to_file(file)
@@ -144,12 +124,12 @@ function update_positions()
 end
 
 function update_duration()
-  local total_seconds = math.floor(duration)
-  local minutes = math.floor(total_seconds / 60)
-  local seconds = total_seconds % 60
-   duration_time = string.format("%d:%02d", minutes, seconds)
-  if selecting == false then 
-  redraw() end
+ local total_seconds = math.floor(duration)
+ local minutes = math.floor(total_seconds / 60)
+ local seconds = total_seconds % 60
+  duration_time = string.format("%d:%02d", minutes, seconds)
+ if selecting == false then 
+ redraw() end
 end
 
 
@@ -157,10 +137,14 @@ function key(n,z)
   if n==1 and z==1 then
     selecting = true
     fileselect.enter(_path.dust,load_file)
-     elseif n==2 and z==1 then
+  elseif n==2 and z==1 then
+     key_pos = 1
+     print(key_pos)
       rate(15)
     elseif n == 2 and z == 0 then
     rate(1)
+    key_pos = 0
+    print(key_pos)
   elseif n==3 and z==1 then
     append_number_to_file(position)
   end
@@ -176,7 +160,7 @@ function rate(rate)
 
 function enc(n,d)
   if n == 3 then
-    enc_pos = util.clamp(enc_pos + d,-1,1)
+    enc_pos = util.clamp(enc_pos + d, 0,1)
     rate(1)
     redraw()
     
@@ -213,32 +197,28 @@ end
 function redraw()
   screen.clear()
   screen.level(15)
-  if Needs_Restart then
-    screen.clear()
-    screen.level(15)
-    Restart_Message:redraw()
-    screen.update()
-    return
-  end
-  screen.aa (1)
   screen.font_size(8)
   screen.move(125,12)
   screen.text_right(position_time .. " | " .. duration_time)
   screen.move(118,10)
-   --screen.text_right("Pos: " .. position_time)
-   screen.move(10,20)
+     screen.move(10,20)
    screen.move(10,32)
   screen.font_size(16)
   screen.text("d(-_-)b")
-  screen.move(125,60)
+  screen.move(123,60)
   screen.font_size(8)
-  if enc_pos == 1 then
-  screen.text_right(">>")
+  if enc_pos == 1 and key_pos == 0 then
+  screen.text_right("")
+ 
   elseif enc_pos == 0 then
-     screen.text_right("=")
-  else
-     screen.text_right("<<")
+     screen.move(123,60)
+     screen.text_right("pause")
+  
   end
+  if  key_pos == 1 and enc_pos == 1 then
+     screen.move(119,60)
+     screen.text_right(" >>  ")
+     end
    screen.move(2,59)
    screen.text("Last Marker: " .. formatted_time)
   

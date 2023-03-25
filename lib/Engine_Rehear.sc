@@ -4,7 +4,11 @@ Engine_Rehear : CroneEngine {
     var synthSampler;
     var oscs;
     var osfun;
-
+    var buffer;
+    var c;
+    var position;
+    
+ 
     // don't change this
     *new { arg context, doneCallback;
         ^super.new(context, doneCallback);
@@ -12,59 +16,47 @@ Engine_Rehear : CroneEngine {
 
    
 alloc {
-    
+this.addCommand("buf", "s", { arg msg;
+
+
+     
+    synthSampler.free;
+     buffer.free;
+     
      SynthDef("Rehear", {
 			arg out = 0,
-			freq, sub_div, noise_level,
-			cutoff, resonance,
-			attack, release,
-			bufnum,
+			buffer,
 			amp, pan,
 			rate = 1,
-	    pos = 0,
-      trig = 1,
-      slew=4;
+	    slew=4;
    
     var lpf_freq = rate.abs.linlin(1, 3, 20000, 5000); // make fast forward less grating on ears
-    var sig, playhead, isPlaying;
+    var sig;
+    
     rate=Lag.kr(rate,slew);
-    #sig, playhead, isPlaying = SuperPlayBufX.arDetails(2, bufnum, rate, trig, start: pos, loop: 0);
-    SendReply.ar(Impulse.ar(10), '/playhead', playhead.components); // send both components of playhead
+    sig = VDiskIn.ar(2,buffer,rate,loop:0,sendID:14);
     LPF.ar(sig, lpf_freq);
 		Out.ar(out,sig);
 		}).add;
-	context.server.sync;	
-
-
-
-
 		
- synthSampler =  Synth("Rehear",target:context.server);
 
-
-  OSCdef(\playhead, { |msg|
- ("Playhead: %       BufDur: %".format(
-    SuperPair(*msg[3..4]).asFloat,
- ~buf.duration.asFloat)
- );
- NetAddr("127.0.0.1", 10111).sendMsg("position",SuperPair(*msg[3..4]).asFloat, "duration",~buf.duration.asFloat);
-}, '/playhead');
-
-
-
-
-this.addCommand("buf","s", { arg msg;
-                Buffer.freeAll;
-                Buffer.read(context.server,msg[1],action:{
-                arg buffer;
-                ~buf = buffer;
-               synthSampler.set(\bufnum,buffer);
-               
-               
-            });
-        });
 	
 
+
+synthSampler =  Synth("Rehear",target:context.server);
+
+
+
+
+
+    
+    buffer =	Buffer.cueSoundFile(context.server,msg[1],0,2,bufferSize: 65536);
+    synthSampler.set(\buffer,buffer);
+    c = SoundFile(msg[1].asString).info; 
+		});
+		
+
+context.server.sync;
         
 this.addCommand("rate","f", { arg msg;
             synthSampler.set(
@@ -72,16 +64,24 @@ this.addCommand("rate","f", { arg msg;
             );
         });
         
+        
 this.addCommand("slew","f", { arg msg;
             synthSampler.set(
                 \slew,msg[1],
             );
         });
         
+ 
+OSCFunc({ arg msg;
+    var sendID = msg[1];
+    var index = msg[3];
+     msg.postln;
+     position = (index % c.numFrames / c.sampleRate);
+     NetAddr("127.0.0.1", 10111).sendMsg("position",position,"duration",c.duration);
         
+},'/diskin');       
 
 }
-
-free {synthSampler.free}
-
+free {synthSampler.free;
+}
 }
