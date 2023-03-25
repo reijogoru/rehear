@@ -23,7 +23,3 @@ E3 to pause
 K3 mark a position
 
 marked positions will be saved in "/home/we/dust/code/rehear/markers.txt"
-
-
-Grid Remote:
-Any key on the Grid is capable of marking a position
