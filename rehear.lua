@@ -6,9 +6,9 @@
 --
 -- K1 load audio file
 --
--- K2 fastforward or rewind
+-- K2 fastforward 
 --
--- enc3 select ff, pause or rw
+-- enc3 pause
 -- 
 -- K3 mark a position
 --
